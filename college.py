@@ -13,7 +13,7 @@ collection = db.a2c
 with open("ApplyingToCollege.json", "r") as file:
     parsed = json.load(file)
     
-print json.dumps(parsed)
+print json.dumps(parsed, indent=4, sort_keys=True)
 
 
 def boro(name):
