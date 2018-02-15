@@ -10,10 +10,10 @@ connection = pymongo.MongoClient("149.89.150.100")
 db = connection.fourthTermJuniors
 collection = db.a2c
 
-f = open("ApplyingToCollege.json", "r")
-for line in f:
-    print line + '/n'
-
+with open("ApplyingToCollege.json", "r") as file:
+    parsed = json.load(file)
+    
+print json.dumps(parsed)
 
 
 def boro(name):
