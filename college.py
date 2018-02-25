@@ -1,19 +1,34 @@
-import pymongo
-import json
-import requests
+'''
+Reddit
+Subreddit: Applying To College
+Descrpition from site:
+    "/r/ApplyingToCollege is the premier forum for college 
+     admissions questions, advice, and discussions, from 
+     college essays and scholarships to SAT/ACT test prep, 
+     career guidance, and more."
+
+Dataset Link: https://www.reddit.com/r/ApplyingToCollege.json
+
+Import mechanism:
+    From the url above, we use the requests module to decode 
+    the json file from the website and read the data into our python script. 
+    1) Import json and requests
+    2) Store json link in a variable
+    3) Read the url using requests.get()
+    4) Decode webpage to json file using json()
+'''
+
+import pymongo, json, requests
 
 
 link = 'https://www.reddit.com/r/ApplyingToCollege.json'
 r = requests.get(link, headers = {'User-agent': 'fourthTermJuniors'})
 data = r.json()
 posts = data["data"]["children"]
-#print json.dumps(posts, indent=4, sort_keys=True)
-
 
 connection = pymongo.MongoClient("149.89.150.100")
 db = connection.fourthTermJuniors
 collection = db.a2c
-#print collection
 
 
 def addToCollection(collection):
