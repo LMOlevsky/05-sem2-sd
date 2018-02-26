@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Form</title>
+  </head>
+
+  <body>
+
+    <form action='/submit'>
+      Sort by:
+      <select>
+	<option value="upvotes">Upvotes</option>
+	<option value="score">Score</option>
+	<option value="stickied">Stickied</option>
+	<option value="nonstickied">NonStickied</option>
+      </select>
+      <input type='submit' value='Submit'>
+    </form>
+
+    {{value}}
+  </body>
+</html>

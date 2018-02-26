@@ -1,3 +1,8 @@
+from flask import Flask, render_template, request, session, redirect, url_for, flash
+import pymongo, json, requests
+
+app = Flask(__name__)
+
 '''
 Reddit
 Subreddit: Applying To College
@@ -18,8 +23,6 @@ Import mechanism:
     4) Decode webpage to json file using json()
 '''
 
-import pymongo, json, requests
-
 
 link = 'https://www.reddit.com/r/ApplyingToCollege.json'
 r = requests.get(link, headers = {'User-agent': 'fourthTermJuniors'})
@@ -30,7 +33,21 @@ connection = pymongo.MongoClient("149.89.150.100")
 db = connection.fourthTermJuniors
 collection = db.a2c
 
+value = ""
 
+@app.route('/', methods=["GET"])
+def root():
+    return render_template("college.html", value=value)
+
+@app.route('/submit', methods=["GET", "POST"])
+def getValue():
+    values = request.args
+    if 'upvotes' in values:
+        value = upvotes(10)
+    return redirect( url_for('root') )
+
+
+#==========================================helper functions
 def addToCollection(collection):
     for each in posts:
         #print collection.update({ "data.title" : each["data"]["title"] }, each, upsert=True)
@@ -40,36 +57,46 @@ def addToCollection(collection):
 def suggested_sort(suggested):
     print "==========printing posts with suggested_sort = " + suggested + "...=========="
     cursor = collection.find({ "data.suggested_sort" : suggested })
+    ans = ""
     for i in cursor:
-        print "\t" + i["data"]["title"]
+        ans += "\t" + i["data"]["title"]
+    return ans
         
 def upvotes(number):
     print "==========printing posts with upvotes > " + str(number) + "...=========="
     cursor = collection.find({ "data.ups" : {"$gt" : number} })
+    ans = ""
     for i in cursor:
-        print "\t" + str(i["data"]["ups"]) + ": " + i["data"]["title"]
+        ans += "\t" + str(i["data"]["ups"]) + ": " + i["data"]["title"]
+    return ans
 
 def score(number):
     print "==========printing posts with score > " + str(number) + "...=========="
     cursor = collection.find({ "data.score" : {"$gt" : number} })
+    ans = ""
     for i in cursor:
-        print "\t" + str(i["data"]["score"]) + ": " + i["data"]["title"]
+        ans += "\t" + str(i["data"]["score"]) + ": " + i["data"]["title"]
+    return ans
         
 def stickied():
     print "==========printing stickied posts...=========="
     cursor = collection.find({ "data.stickied" : True })
+    ans = ""
     for i in cursor:
-        print "\t" + i["data"]["title"]
+        ans += "\t" + i["data"]["title"]
+    return ans
 
 def nonstickied():
     print "==========printing nonstickied posts...=========="
     cursor = collection.find({ "data.stickied" : False })
+    ans = ""
     for i in cursor:
-        print "\t" + i["data"]["title"]
+        ans += "\t" + i["data"]["title"]
+    return ans
 
 
 addToCollection(collection)
-
+'''
 suggested_sort("confidence")
 upvotes(15)
 upvotes(300)
@@ -77,3 +104,7 @@ score(15)
 score(300)
 stickied()
 nonstickied()
+'''
+if __name__ == '__main__':
+    app.debug = True
+    app.run()
