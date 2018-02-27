@@ -33,19 +33,6 @@ connection = pymongo.MongoClient("149.89.150.100")
 db = connection.fourthTermJuniors
 collection = db.a2c
 
-value = ""
-
-@app.route('/', methods=["GET"])
-def root():
-    return render_template("college.html", value=value)
-
-@app.route('/submit', methods=["GET", "POST"])
-def getValue():
-    values = request.args
-    if 'upvotes' in values:
-        value = upvotes(10)
-    return redirect( url_for('root') )
-
 
 #==========================================helper functions
 def addToCollection(collection):
@@ -105,6 +92,17 @@ score(300)
 stickied()
 nonstickied()
 '''
+
+@app.route('/', methods=["GET", "POST"])
+def root():
+    return render_template("college.html")
+
+@app.route('/submit', methods=["GET", "POST"])
+def getValue():
+    votes = request.args["votes"]
+    return render_template("college.html", value=upvotes(int(votes)))
+
+
 if __name__ == '__main__':
     app.debug = True
     app.run()

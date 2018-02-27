@@ -7,16 +7,13 @@
   <body>
 
     <form action='/submit'>
-      Sort by:
-      <select>
-	<option value="upvotes">Upvotes</option>
-	<option value="score">Score</option>
-	<option value="stickied">Stickied</option>
-	<option value="nonstickied">NonStickied</option>
-      </select>
-      <input type='submit' value='Submit'>
+      Show posts with at least <input type="text" name="votes"> upvotes
+      <br>
+      <input type='submit' value='submit'>
+      <br><br>
     </form>
 
     {{value}}
+    
   </body>
 </html>
