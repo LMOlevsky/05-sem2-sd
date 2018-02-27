@@ -30,6 +30,7 @@ data = r.json()
 posts = data["data"]["children"]
 
 connection = pymongo.MongoClient("149.89.150.100")
+connection.drop_database("fourthTermJuniors")
 db = connection.fourthTermJuniors
 collection = db.a2c
 
